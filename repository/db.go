@@ -25,6 +25,8 @@ const (
 	SELECT_COUNT_QUERY      = `SELECT count FROM metrics WHERE domain=$1 AND carrier=$2 AND selector=$3 AND match=$4;`
 	DELETE_TABLE_QUERY      = `DELETE FROM metrics;`
 	INSERT_ONE_METRIC_QUERY = `INSERT INTO metrics (domain, carrier, selector, match, query, predicate, amount, count) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`
+	UPDATE_AMOUNT_QUERY     = `UPDATE metrics SET amount=$1 WHERE domain=$2 AND carrier=$3 AND selector=$4 AND match=$5;`
+	UPDATE_COUNT_QUERY      = `UPDATE metrics SET count=$1 WHERE domain=$2 AND carrier=$3 AND selector=$4 AND match=$5;`
 )
 
 func (repository *Repository) CreateTableUnlessExist() (err error) {
@@ -58,7 +60,7 @@ func (repository *Repository) InsertMetric(metric *model.Metric) (err error) {
 
 func (repository *Repository) InsertMetrics(metrics []*model.Metric) (err error) {
 	for _, metric := range metrics {
-		err = repository.SilentExecute(INSERT_ONE_METRIC_QUERY, metric.Domain, metric.Carrier, metric.Selector, metric.Match, metric.Query, metric.Predicate, 3.0, 10111)
+		err = repository.SilentExecute(INSERT_ONE_METRIC_QUERY, metric.Domain, metric.Carrier, metric.Selector, metric.Match, metric.Query, metric.Predicate, 9.0, 10111)
 		if err != nil {
 			return
 		}
@@ -88,6 +90,16 @@ func (repository *Repository) QueryAmount(request *model.MetricRequest) (amount 
 func (repository *Repository) QueryCount(request *model.MetricRequest) (count int, err error) {
 	row := repository.Database.QueryRow(SELECT_COUNT_QUERY, request.Domain, request.Carrier, request.Selector, request.Match)
 	err = row.Scan(&count)
+	return
+}
+
+func (repository *Repository) UpdateAmount(request *model.MetricRequest, amount float32) (err error) {
+	err = repository.SilentExecute(UPDATE_AMOUNT_QUERY, amount, request.Domain, request.Carrier, request.Selector, request.Match)
+	return
+}
+
+func (repository *Repository) UpdateCount(request *model.MetricRequest, count int) (err error) {
+	err = repository.SilentExecute(UPDATE_COUNT_QUERY, count, request.Domain, request.Carrier, request.Selector, request.Match)
 	return
 }
 
@@ -130,7 +142,12 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	amount, err := Instance.QueryCount(&model.MetricRequest{Domain: "exposure", Carrier: "bsnl", Selector: "hour", Match: "1"})
+	amount, err := Instance.QueryAmount(&model.MetricRequest{Domain: "exposure", Carrier: "bsnl", Selector: "hour", Match: "1"})
+	if err != nil {
+		panic(err)
+	}
+
+	err = Instance.UpdateAmount(&model.MetricRequest{Domain: "exposure", Carrier: "bsnl", Selector: "hour", Match: "2"}, 1039.0)
 	if err != nil {
 		panic(err)
 	}
