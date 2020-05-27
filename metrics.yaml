@@ -1,0 +1,104 @@
+domains:
+  - domain: exposure
+    carriers:
+      - carrier: bsnl
+        selectors:
+          - type: range
+            selector: hour
+            start: 0
+            end: 23
+            query: select * from <REPLACE-ME>
+            predicate: isHourWithin
+          - type: range
+            selector: day
+            start: 1
+            end: 31
+            query: select * from <REPLACE-ME>
+            predicate: isDayWithin
+          - type: range
+            selector: week
+            start: 1
+            end: 7
+            query: select * from <REPLACE-ME>
+            predicate: isWeekWithin
+          - type: range
+            selector: month
+            start: 0
+            end: 11
+            query: select * from <REPLACE-ME>
+            predicate: isMonthWithin
+          - type: list
+            selector: channel
+            values:
+              - SMS
+              - ANDROID
+              - IOS
+              - USSD
+            query: select * from <REPLACE-ME>
+            predicate: isChannelWithin
+          - type: range
+            selector: status
+            start: 1
+            end: 5
+            query: select * from <REPLACE-ME>
+            predicate: isStatusWithin
+          - type: list
+            selector: loan
+            values:
+              - 5
+              - 10
+              - 15
+              - 20
+            query: select * from <REPLACE-ME>
+            predicate: isLoanWithin
+      - carrier: avantel
+        selectors:
+          - type: range
+            selector: hour
+            start: 0
+            end: 23
+            query: select * from <REPLACE-ME>
+            predicate: isHourWithin
+          - type: range
+            selector: day
+            start: 1
+            end: 31
+            query: select * from <REPLACE-ME>
+            predicate: isDayWithin
+          - type: range
+            selector: week
+            start: 1
+            end: 7
+            query: select * from <REPLACE-ME>
+            predicate: isWeekWithin
+          - type: range
+            selector: month
+            start: 0
+            end: 11
+            query: select * from <REPLACE-ME>
+            predicate: isMonthWithin
+          - type: list
+            selector: channel
+            values:
+              - SMS
+              - ANDROID
+              - IOS
+              - USSD
+            query: select * from <REPLACE-ME>
+            predicate: isChannelWithin
+          - type: range
+            selector: status
+            start: 1
+            end: 5
+            query: select * from <REPLACE-ME>
+            predicate: isStatusWithin
+          - type: list
+            selector: loan
+            values:
+              - 5
+              - 10
+              - 15
+              - 20
+            query: select * from <REPLACE-ME>
+            predicate: isLoanWithin
+
