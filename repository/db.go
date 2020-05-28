@@ -95,11 +95,17 @@ func (repository *Repository) QueryCount(request *model.MetricRequest) (count in
 
 func (repository *Repository) UpdateAmount(request *model.MetricRequest, amount float32) (err error) {
 	err = repository.SilentExecute(UPDATE_AMOUNT_QUERY, amount, request.Domain, request.Carrier, request.Selector, request.Match)
+	if err == nil {
+		repository.UpdateMetricAmount(request, amount)
+	}
 	return
 }
 
 func (repository *Repository) UpdateCount(request *model.MetricRequest, count int) (err error) {
 	err = repository.SilentExecute(UPDATE_COUNT_QUERY, count, request.Domain, request.Carrier, request.Selector, request.Match)
+	if err == nil {
+		repository.UpdateMetricCount(request, count)
+	}
 	return
 }
 
